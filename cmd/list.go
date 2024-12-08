@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 	"log/slog"
+	"os"
+	"text/tabwriter"
 
 	"github.com/peterramaldes/tri/todo"
 	"github.com/spf13/cobra"
@@ -20,7 +22,12 @@ func list(cmd *cobra.Command, args []string) {
 		slog.Error(msg)
 	}
 
-	fmt.Println(items)
+	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
+	for _, v := range items {
+		pos := fmt.Sprintf("%d.", v.Position)
+		fmt.Fprintln(w, pos, v.PrettyP(), v.Text)
+	}
+	w.Flush()
 }
 
 func init() {

@@ -17,7 +17,9 @@ var addCmd = &cobra.Command{
 func add(cmd *cobra.Command, args []string) {
 	items := []todo.Item{}
 	for _, x := range args {
-		items = append(items, todo.Item{Text: x})
+		i := todo.Item{Text: x}
+		i.SetPriority(priority)
+		items = append(items, i)
 	}
 
 	err := todo.SaveItems(dataFile, items)
@@ -26,6 +28,9 @@ func add(cmd *cobra.Command, args []string) {
 	}
 }
 
+var priority int
+
 func init() {
 	rootCmd.AddCommand(addCmd)
+	addCmd.Flags().IntVarP(&priority, "priority", "p", 2, "Priority: 1,2,3")
 }
